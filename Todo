@@ -1,0 +1,34 @@
+//Todo
+ Admin
+
+ 1) Create studentID
+ 2) Create staffID
+ 
+ 3) Craete courses(Chat rooms)
+ 4) Assign Staff to courses
+ 	a)edit model scheme to include courses(json list)
+
+ 5) Update courses
+ 6) Assign student to courses
+ 7) Manage Authorization
+ 8) Craete timetable
+
+ Staff
+
+ 1) Uplaod course materials
+ 2) View list of registerd students for course
+ 3) Create grading structure
+ 4) Assign grades to  students of course
+ 5) Manage account login
+ 6) View timetable
+ 7) Emails
+
+ Student
+
+ 1) Register for courses
+ 2) View Course materials (only after registration)
+ 3) Upload assignment materials
+ 4) View Timetable
+ 5) View Results
+ 6) Access to online library
+ 7) Emails -- View /send

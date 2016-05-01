@@ -1,0 +1,23 @@
+<section>
+  <div class="page-header">
+    <h1 ng-bind="vm.courses.title"></h1>
+  </div>
+  <div class="pull-right" ng-show="vm.authentication.user._id == vm.courses.user._id">
+    <a class="btn btn-primary" ui-sref="courses.edit({ coursesId: vm.courses._id })">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="vm.courses.created | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.courses.user" ng-bind="vm.courses.user.displayName"></span>
+      <span ng-if="!vm.courses.user">Deleted User</span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="vm.courses.content"></p>
+</section>
