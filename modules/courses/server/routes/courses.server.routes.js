@@ -6,18 +6,17 @@
 var coursesPolicy = require('../policies/courses.server.policy'),
   courses = require('../controllers/courses.server.controller');
 
-module.exports = function (app) {
-  // Staff collection routes
+module.exports = function(app) {
+  // Courses Routes
   app.route('/api/courses').all(coursesPolicy.isAllowed)
     .get(courses.list)
     .post(courses.create);
 
-  // Single Staffroutes
-  app.route('/api/courses/:coursesId').all(coursesPolicy.isAllowed)
+  app.route('/api/courses/:courseId').all(coursesPolicy.isAllowed)
     .get(courses.read)
     .put(courses.update)
     .delete(courses.delete);
 
-  // Finish by binding the Staff middleware
-  app.param('coursesId', courses.coursesByID);
+  // Finish by binding the Course middleware
+  app.param('courseId', courses.courseByID);
 };

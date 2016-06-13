@@ -1,0 +1,31 @@
+<section>
+  <div class="page-header">
+    <h1>{{vm.student._id ? 'Edit Student' : 'New Student'}}</h1>
+  </div>
+  <div class="col-md-12">
+    <form  name="vm.form.studentForm" class="form-horizontal" ng-submit="vm.save(vm.form.studentForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="name">Name</label>
+          <input name="name" type="text" ng-model="vm.student.name" id="name" class="form-control" placeholder="Name" required>
+          <div ng-messages="vm.form.studentForm.name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Student name is required.</p>
+          </div>
+        </div>
+        <label class="control-label">Assign Courses</label>
+            <div class="list-group">
+            <span ng-repeat="course in listcourses" class="list-group-item">
+              
+              <input type="checkbox" data-ng-model="course.checked" >{{course.title}}<br>
+            </span>
+            </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.student._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('courses.routes')
+    .module('courses')
     .config(routeConfig);
 
   routeConfig.$inject = ['$stateProvider'];
@@ -18,54 +18,62 @@
         url: '',
         templateUrl: 'modules/courses/client/views/list-courses.client.view.html',
         controller: 'CoursesListController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Courses List'
+        }
       })
       .state('courses.create', {
         url: '/create',
-        templateUrl: 'modules/courses/client/views/form-courses.client.view.html',
+        templateUrl: 'modules/courses/client/views/form-course.client.view.html',
         controller: 'CoursesController',
         controllerAs: 'vm',
         resolve: {
-          coursesResolve: newCourses
+          courseResolve: newCourse
         },
         data: {
-          roles: ['user', 'admin']
+          roles: ['user', 'admin'],
+          pageTitle : 'Courses Create'
         }
       })
       .state('courses.edit', {
-        url: '/:coursesId/edit',
-        templateUrl: 'modules/courses/client/views/form-courses.client.view.html',
+        url: '/:courseId/edit',
+        templateUrl: 'modules/courses/client/views/form-course.client.view.html',
         controller: 'CoursesController',
         controllerAs: 'vm',
         resolve: {
-          coursesResolve: getCourses
+          courseResolve: getCourse
         },
         data: {
-          roles: ['user', 'admin']
+          roles: ['user', 'admin'],
+          pageTitle: 'Edit Course {{ courseResolve.name }}'
         }
       })
       .state('courses.view', {
-        url: '/:coursesId',
-        templateUrl: 'modules/courses/client/views/view-courses.client.view.html',
+        url: '/:courseId',
+        templateUrl: 'modules/courses/client/views/view-course.client.view.html',
         controller: 'CoursesController',
         controllerAs: 'vm',
         resolve: {
-          coursesResolve: getCourses
+          courseResolve: getCourse
+        },
+        data:{
+          pageTitle: 'Course {{ articleResolve.name }}'
         }
       });
   }
 
-  getCourses.$inject = ['$stateParams', 'CoursesService'];
+  getCourse.$inject = ['$stateParams', 'CoursesService'];
 
-  function getCourses($stateParams, CoursesService) {
+  function getCourse($stateParams, CoursesService) {
     return CoursesService.get({
-      coursesId: $stateParams.coursesId
+      courseId: $stateParams.courseId
     }).$promise;
   }
 
-  newCourses.$inject = ['CoursesService'];
+  newCourse.$inject = ['CoursesService'];
 
-  function newCourses(CoursesService) {
+  function newCourse(CoursesService) {
     return new CoursesService();
   }
 })();

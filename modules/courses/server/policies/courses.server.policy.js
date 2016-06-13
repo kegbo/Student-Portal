@@ -9,7 +9,7 @@ var acl = require('acl');
 acl = new acl(new acl.memoryBackend());
 
 /**
- * Invoke courses Permissions
+ * Invoke Courses Permissions
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
@@ -18,7 +18,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/courses',
       permissions: '*'
     }, {
-      resources: '/api/courses/:coursesId',
+      resources: '/api/courses/:courseId',
       permissions: '*'
     }]
   }, {
@@ -27,7 +27,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/courses',
       permissions: ['get', 'post']
     }, {
-      resources: '/api/courses/:coursesId',
+      resources: '/api/courses/:courseId',
       permissions: ['get']
     }]
   }, {
@@ -36,24 +36,24 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/courses',
       permissions: ['get']
     }, {
-      resources: '/api/courses/:coursesId',
+      resources: '/api/courses/:courseId',
       permissions: ['get']
     }]
   }]);
 };
 
 /**
- * Check If Staff Policy Allows
+ * Check If Courses Policy Allows
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
 
-  // If an courses is being processed and the current user created it then allow any manipulation
-  if (req.courses && req.user && req.courses.user && req.courses.user.id === req.user.id) {
+  // If an Course is being processed and the current user created it then allow any manipulation
+  if (req.course && req.user && req.course.user && req.course.user.id === req.user.id) {
     return next();
   }
 
-  // Check for courses roles
+  // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
     if (err) {
       // An authorization error occurred

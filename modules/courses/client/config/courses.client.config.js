@@ -8,6 +8,7 @@
   menuConfig.$inject = ['Menus'];
 
   function menuConfig(Menus) {
+    // Set top bar menu items
     Menus.addMenuItem('topbar', {
       title: 'Courses',
       state: 'courses',
@@ -17,13 +18,13 @@
 
     // Add the dropdown list item
     Menus.addSubMenuItem('topbar', 'courses', {
-      title: 'List courses',
+      title: 'List Courses',
       state: 'courses.list'
     });
 
     // Add the dropdown create item
     Menus.addSubMenuItem('topbar', 'courses', {
-      title: 'Create Courses',
+      title: 'Create Course',
       state: 'courses.create',
       roles: ['user']
     });

@@ -32,3 +32,15 @@
  5) View Results
  6) Access to online library
  7) Emails -- View /send
+
+
+ work on staff module
+ create staffs
+ work on student module
+ crate students
+ create relations btw objects in mongoose
+ try controller depencies
+ create relationship in controller
+ fix routing
+ create partials
+ styling

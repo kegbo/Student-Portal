@@ -1,21 +1,22 @@
 <section>
   <div class="page-header">
-    <h1>courses</h1>
+    <h1>Courses</h1>
   </div>
   <div class="list-group">
-    <a ng-repeat="courses in vm.courses" ui-sref="courses.view({ coursesId: courses._id })" class="list-group-item">
+    <a data-ng-repeat="course in vm.courses"
+       data-ui-sref="courses.view({ courseId: course._id })"
+       class="list-group-item">
       <small class="list-group-item-text">
         Posted on
-        <span ng-bind="courses.created | date:'mediumDate'"></span>
+        <span data-ng-bind="course.created | date:'mediumDate'"></span>
         by
-        <span ng-if="courses.user" ng-bind="courses.user.displayName"></span>
-        <span ng-if="!courses.user">Deleted User</span>
+        <span data-ng-if="course.user" data-ng-bind="course.user.displayName"></span>
+        <span data-ng-if="!course.user">Deleted User</span>
       </small>
-      <h4 class="list-group-item-heading" ng-bind="courses.title"></h4>
-      <p class="list-group-item-text" ng-bind="courses.content"></p>
+      <h4 class="list-group-item-heading" data-ng-bind="course.title"></h4>
     </a>
   </div>
-  <div class="alert alert-warning text-center" ng-if="vm.courses.$resolved && !vm.courses.length">
-    No courses yet, why don't you <a ui-sref="courses.create">create one</a>?
+  <div class="alert alert-warning text-center" data-ng-if="vm.courses.$resolved && !vm.courses.length">
+    No Courses yet, why don't you <a data-ui-sref="courses.create">create one</a>?
   </div>
 </section>

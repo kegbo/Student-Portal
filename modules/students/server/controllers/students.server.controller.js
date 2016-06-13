@@ -1,110 +1,117 @@
 'use strict';
 
 /**
- * Module dependencies
+ * Module dependencies.
  */
 var path = require('path'),
   mongoose = require('mongoose'),
-  Students = mongoose.model('Students'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+  Student = mongoose.model('Student'),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  _ = require('lodash');
 
 /**
- * Create an courses
+ * Create a Student
  */
-exports.create = function (req, res) {
-  var students = new Students(req.body);
-  students.user = req.user;
+exports.create = function(req, res) {
+  var student = new Student(req.body);
+  student.user = req.user;
 
-  students.save(function (err) {
+  student.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(students);
+      res.jsonp(student);
     }
   });
 };
 
 /**
- * Show the current courses
+ * Show the current Student
  */
-exports.read = function (req, res) {
-  res.json(req.students);
+exports.read = function(req, res) {
+  // convert mongoose document to JSON
+  var student = req.student ? req.student.toJSON() : {};
+
+  // Add a custom field to the Article, for determining if the current User is the "owner".
+  // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
+  student.isCurrentUserOwner = req.user && student.user && student.user._id.toString() === req.user._id.toString() ? true : false;
+
+  res.jsonp(student);
 };
 
 /**
- * Update an courses
+ * Update a Student
  */
-exports.update = function (req, res) {
-  var students = req.students;
+exports.update = function(req, res) {
+  var student = req.student ;
 
-  students.title = req.body.title;
-  students.content = req.body.content;
+  student = _.extend(student , req.body);
 
-  students.save(function (err) {
+  student.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(students);
+      res.jsonp(student);
     }
   });
 };
 
 /**
- * Delete an courses
+ * Delete an Student
  */
-exports.delete = function (req, res) {
-  var students = req.students;
+exports.delete = function(req, res) {
+  var student = req.student ;
 
-  students.remove(function (err) {
+  student.remove(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(students);
+      res.jsonp(student);
     }
   });
 };
 
 /**
- * List of courses
+ * List of Students
  */
-exports.list = function (req, res) {
-  Students.find().sort('-created').populate('user', 'displayName').exec(function (err, students) {
+exports.list = function(req, res) { 
+  Student.find().sort('-created').populate('user', 'displayName').exec(function(err, students) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(students);
+      res.jsonp(students);
     }
   });
 };
 
 /**
- * courses middleware
+ * Student middleware
  */
-exports.studentsByID = function (req, res, next, id) {
+exports.studentByID = function(req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'students is invalid'
+      message: 'Student is invalid'
     });
   }
 
-  Students.findById(id).populate('user', 'displayName').exec(function (err, students) {
+  Student.findById(id).populate('user','course').exec(function (err, student) {
     if (err) {
       return next(err);
-    } else if (!students) {
+    } else if (!student) {
       return res.status(404).send({
-        message: 'No students with that identifier has been found'
+        message: 'No Student with that identifier has been found'
       });
     }
-    req.students = students;
+    req.student = student;
     next();
   });
 };

@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('students.routes')
+    .module('students')
     .config(routeConfig);
 
   routeConfig.$inject = ['$stateProvider'];
@@ -18,54 +18,62 @@
         url: '',
         templateUrl: 'modules/students/client/views/list-students.client.view.html',
         controller: 'StudentsListController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Students List'
+        }
       })
       .state('students.create', {
         url: '/create',
-        templateUrl: 'modules/students/client/views/form-students.client.view.html',
+        templateUrl: 'modules/students/client/views/form-student.client.view.html',
         controller: 'StudentsController',
         controllerAs: 'vm',
         resolve: {
-          studentsResolve: newStudents
+          studentResolve: newStudent
         },
         data: {
-          roles: ['user', 'admin']
+          roles: ['user', 'admin'],
+          pageTitle : 'Students Create'
         }
       })
       .state('students.edit', {
-        url: '/:studentsId/edit',
-        templateUrl: 'modules/students/client/views/form-students.client.view.html',
+        url: '/:studentId/edit',
+        templateUrl: 'modules/students/client/views/form-student.client.view.html',
         controller: 'StudentsController',
         controllerAs: 'vm',
         resolve: {
-          studentsResolve: getStudents
+          studentResolve: getStudent
         },
         data: {
-          roles: ['user', 'admin']
+          roles: ['user', 'admin'],
+          pageTitle: 'Edit Student {{ studentResolve.name }}'
         }
       })
       .state('students.view', {
-        url: '/:coursesId',
-        templateUrl: 'modules/students/client/views/view-students.client.view.html',
+        url: '/:studentId',
+        templateUrl: 'modules/students/client/views/view-student.client.view.html',
         controller: 'StudentsController',
         controllerAs: 'vm',
         resolve: {
-          studentsResolve: getStudents
+          studentResolve: getStudent
+        },
+        data:{
+          pageTitle: 'Student {{ articleResolve.name }}'
         }
       });
   }
 
-  getStudents.$inject = ['$stateParams', 'StudentsService'];
+  getStudent.$inject = ['$stateParams', 'StudentsService'];
 
-  function getStudents($stateParams, StudentsService) {
+  function getStudent($stateParams, StudentsService) {
     return StudentsService.get({
-      studentsId: $stateParams.studentsId
+      studentId: $stateParams.studentId
     }).$promise;
   }
 
-  newStudents.$inject = ['StudentsService'];
+  newStudent.$inject = ['StudentsService'];
 
-  function newStudents(StudentsService) {
+  function newStudent(StudentsService) {
     return new StudentsService();
   }
 })();

@@ -1,0 +1,45 @@
+<section>
+  <div class="page-header">
+    <h1 data-ng-bind="vm.course.title"></h1>
+  </div>
+  <div class="pull-right"
+       data-ng-show="vm.course.isCurrentUserOwner">
+    <a class="btn btn-primary"
+       data-ui-sref="courses.edit({ courseId: vm.course._id })">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" data-ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+ <h3>Student</h3>
+ <div class="list-group">
+    <a data-ng-repeat="student in coursesStudent"
+       data-ui-sref="students.view({ studentId: student._id })"
+       class="list-group-item" >
+     
+      <h4 class="list-group-item-heading">{{student.name}}</h4>
+    </a>
+  </div>
+ <h3>Staff</h3>
+ <div class="list-group">
+    <a data-ng-repeat="staff in coursesStaff"
+       data-ui-sref="staffs.view({ staffId: staff._id })"
+       class="list-group-item">
+     
+      <h4 class="list-group-item-heading" data-ng-bind="staff.firstname"></h4>
+    </a>
+  </div>
+ 
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span data-ng-bind="vm.course.created | date:'mediumDate'"></span>
+      by
+      <span data-ng-if="vm.course.user"
+            data-ng-bind="vm.course.user.displayName"></span>
+      <span data-ng-if="!vm.course.user">Deleted User</span>
+    </em>
+  </small>
+  <p class="lead" data-ng-bind="vm.course.content"></p>
+</section>

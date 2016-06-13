@@ -1,110 +1,117 @@
 'use strict';
 
 /**
- * Module dependencies
+ * Module dependencies.
  */
 var path = require('path'),
   mongoose = require('mongoose'),
-  Courses = mongoose.model('Courses'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+  Course = mongoose.model('Course'),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  _ = require('lodash');
 
 /**
- * Create an courses
+ * Create a Course
  */
-exports.create = function (req, res) {
-  var courses = new Courses(req.body);
-  courses.user = req.user;
+exports.create = function(req, res) {
+  var course = new Course(req.body);
+  course.user = req.user;
 
-  courses.save(function (err) {
+  course.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(courses);
+      res.jsonp(course);
     }
   });
 };
 
 /**
- * Show the current courses
+ * Show the current Course
  */
-exports.read = function (req, res) {
-  res.json(req.courses);
+exports.read = function(req, res) {
+  // convert mongoose document to JSON
+  var course = req.course ? req.course.toJSON() : {};
+
+  // Add a custom field to the Article, for determining if the current User is the "owner".
+  // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
+  course.isCurrentUserOwner = req.user && course.user && course.user._id.toString() === req.user._id.toString() ? true : false;
+
+  res.jsonp(course);
 };
 
 /**
- * Update an courses
+ * Update a Course
  */
-exports.update = function (req, res) {
-  var courses = req.courses;
+exports.update = function(req, res) {
+  var course = req.course ;
 
-  courses.title = req.body.title;
-  courses.content = req.body.content;
+  course = _.extend(course , req.body);
 
-  courses.save(function (err) {
+  course.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(courses);
+      res.jsonp(course);
     }
   });
 };
 
 /**
- * Delete an courses
+ * Delete an Course
  */
-exports.delete = function (req, res) {
-  var courses = req.courses;
+exports.delete = function(req, res) {
+  var course = req.course ;
 
-  courses.remove(function (err) {
+  course.remove(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(courses);
+      res.jsonp(course);
     }
   });
 };
 
 /**
- * List of courses
+ * List of Courses
  */
-exports.list = function (req, res) {
-  Courses.find().sort('-created').populate('user', 'displayName').exec(function (err, courses) {
+exports.list = function(req, res) { 
+  Course.find().sort('-created').populate('user' ).exec(function(err, courses) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(courses);
+      res.jsonp(courses);
     }
   });
 };
 
 /**
- * courses middleware
+ * Course middleware
  */
-exports.coursesByID = function (req, res, next, id) {
+exports.courseByID = function(req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'Courses is invalid'
+      message: 'Course is invalid'
     });
   }
 
-  Courses.findById(id).populate('user', 'displayName').exec(function (err, courses) {
+  Course.findById(id).populate('user','staff').exec(function (err, course) {
     if (err) {
       return next(err);
-    } else if (!courses) {
+    } else if (!course) {
       return res.status(404).send({
-        message: 'No courses with that identifier has been found'
+        message: 'No Course with that identifier has been found'
       });
     }
-    req.courses = courses;
+    req.course = course;
     next();
   });
 };

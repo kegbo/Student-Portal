@@ -1,0 +1,37 @@
+<section>
+  <div class="page-header">
+    <h1 data-ng-bind="vm.student.name"></h1>
+  </div>
+  <div class="pull-right"
+       data-ng-show="vm.student.isCurrentUserOwner">
+    <a class="btn btn-primary"
+       data-ui-sref="students.edit({ studentId: vm.student._id })">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" data-ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+
+   <h3>Courses</h3>
+ 
+<div class="list-group">
+    <a data-ng-repeat="course in studentCourses"
+       data-ui-sref="courses.view({ courseId: course._id })"
+       class="list-group-item">
+     
+      <h4 class="list-group-item-heading">{{course.title}}</h4>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span data-ng-bind="vm.student.created | date:'mediumDate'"></span>
+      by
+      <span data-ng-if="vm.student.user"
+            data-ng-bind="vm.student.user.displayName"></span>
+      <span data-ng-if="!vm.student.user">Deleted User</span>
+    </em>
+  </small>
+  <p class="lead" data-ng-bind="vm.student.content"></p>
+</section>
