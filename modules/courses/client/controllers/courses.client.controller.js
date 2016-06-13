@@ -18,7 +18,8 @@
     vm.remove = remove;
     vm.save = save;
     //Array of filtered staff
-    var temp = [];
+   $scope.coursesStaff = []; 
+    $scope.coursesStudent = [];
     $scope.liststaff = []; 
     //List of all   
     StaffsService.query(function(resource){
@@ -33,8 +34,7 @@
       }
     });
       
-      $scope.coursesStaff = []; 
-      $scope.coursesStudent = [];
+      
    
     //get staff courses object to get course title
    if(vm.course.staff!=undefined){
@@ -42,16 +42,16 @@
          $scope.coursesStaff[i] = StaffsService.get({ staffId: vm.course.staff[i] });     
       }
     }
-    var some=[];
+
     //Get list of students taking this course
      if(vm.course.student!=undefined){
       for ( var i = 0; i < vm.course.student.length; i++) { 
-         $scope.coursesStudent[i] = StudentsService.get({ studentId: vm.course.students[i] });     
-
+         $scope.coursesStudent[i] = StudentsService.get({ studentId: vm.course.student[i] }); 
+        
       }
     }
     
-
+  var temp = [];
    //Filter for assigning staff to this course
    $scope.selectedStaff = function () {
         temp = $filter('filter')($scope.liststaff,({checked: true}));    

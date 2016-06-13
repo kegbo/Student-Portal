@@ -19,8 +19,8 @@
     vm.save = save;
 
    $scope.listcourses = [];
-   CoursesService.query(function (resourse){
-    $scope.listcourses = resourse;
+   CoursesService.query(function (resource){
+    $scope.listcourses = resource;
     for(var i = 0; i < $scope.listcourses.length; i ++){
       if(vm.student.course == undefined){
               vm.student.course = [];
